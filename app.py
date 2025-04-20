@@ -180,6 +180,28 @@ def main():
     cap.release()
     cv.destroyAllWindows()
 
+def draw_landmarks(image, landmark_point, point_history):
+    if len(landmark_point) > 0:
+        # Thumb
+        cv.line(image, tuple(landmark_point[2]), tuple(landmark_point[3]), (0, 0, 0), 6)
+        cv.line(image, tuple(landmark_point[2]), tuple(landmark_point[3]), (255, 255, 255), 2)
+        cv.line(image, tuple(landmark_point[3]), tuple(landmark_point[4]), (0, 0, 0), 6)
+        cv.line(image, tuple(landmark_point[3]), tuple(landmark_point[4]), (255, 255, 255), 2)
+
+        # Index finger
+        cv.line(image, tuple(landmark_point[5]), tuple(landmark_point[6]), (0, 0, 0), 6)
+        cv.line(image, tuple(landmark_point[5]), tuple(landmark_point[6]), (255, 255, 255), 2)
+
+        # Draw with fingertip (blue color)
+        fingertip = landmark_point[8]  # The fingertip is at index 8
+        point_history.append(fingertip)
+
+        # Draw continuous line if we have previous points
+        if len(point_history) > 1:
+            for i in range(1, len(point_history)):
+                cv.line(image, tuple(point_history[i - 1]), tuple(point_history[i]), (255, 0, 0), 5)
+
+    return image
 
 def select_mode(key, mode):
     number = -1
